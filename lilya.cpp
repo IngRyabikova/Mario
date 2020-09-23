@@ -1,6 +1,6 @@
 #include "TXLib.h"
 
-
+#include "Person.cpp"
 
 
 
@@ -13,7 +13,7 @@ int main()
 
     txCreateWindow(1280,720);
 
-
+//    player
     HDC kirpich     = txLoadImage("Картинки\\kirpich.bmp");
     HDC zemlya      = txLoadImage("Картинки\\zemlya.bmp");
     HDC truba       = txLoadImage("Картинки\\truba.bmp");
@@ -21,16 +21,17 @@ int main()
     bool drawzemlya = false;
     bool drawtruba = false;
 
+
+    Person pers = {100, 150, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
         txBegin();
+        txSetFillColor(TX_WHITE);
         txClear();
 
 
-
-        txSetColor(TX_WHITE);
-        txSetFillColor(TX_WHITE);
-        txRectangle(0,0,1280,720);
+            Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
+        pers.movePerson();
 
         txSetColor(TX_BLACK);
         txRectangle(1050,1,1280,110);
@@ -117,7 +118,7 @@ int main()
          txBitBlt(txDC(),530,1,550, 160,truba);
 
 
-
+//
 
         txSleep(15);
         txEnd();
