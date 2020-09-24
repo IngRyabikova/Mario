@@ -3,26 +3,45 @@
 #include "Person.cpp"
 
 
+struct Picture
+{
+    int x;
+    int y;
+    int width;
+    int height;
+    HDC object;
+    bool visible;
+};
 
+struct Button
+{
+    int x;
+    int y;
+    const char text[];
+};
 
-
-
+void drawButton(int x,int y,const char text[])
+{
+    txSetColour(TX_BLACK);
+    txRectangle(x,y,x + 200,y + 100);
+    txSelectFont("ARIAL", 40);
+    txDrawText(x,y,x + 200,y + 100,text);
+}
 
 int main()
 {
 
     txCreateWindow(1280,720);
+    txTextCursor (false);
 
-//    player
-    HDC kirpich     = txLoadImage("Êàðòèíêè\\kirpich.bmp");
-    HDC zemlya      = txLoadImage("Êàðòèíêè\\zemlya.bmp");
-    HDC truba       = txLoadImage("Êàðòèíêè\\truba.bmp");
-    bool drawkirpich = false;
-    bool drawzemlya = false;
-    bool drawtruba = false;
+      Picture pic[100];
+    pic[0] = {1300, 250, 60, 60, txLoadImage ("ÃŠÃ Ã°Ã²Ã¨Ã­ÃªÃ¨/kirpich.bmp"), false};
+    pic[1] = {1300, 400, 60, 60, txLoadImage ("ÃŠÃ Ã°Ã²Ã¨Ã­ÃªÃ¨/Ã¢Ã®Ã¯Ã°Ã®Ã±.bmp"), false};
+    pic[2] = {1300, 550, 60, 120, txLoadImage ("ÃŠÃ Ã°Ã²Ã¨Ã­ÃªÃ¨/truba.bmp"), false};
+    pic[3] = {1300, 250, 60, 60, txLoadImage ("ÃŠÃ Ã°Ã²Ã¨Ã­ÃªÃ¨/money.bmp"), false};
 
 
-    Person pers = {100, 150, 100, 0, txLoadImage("Êàðòèíêè/HeroLeft.bmp"), txLoadImage("Êàðòèíêè/HeroRight.bmp"), txLoadImage("Êàðòèíêè/HeroLeft.bmp")};
+    Person pers = {100, 150, 100, 0, txLoadImage("ÃŠÃ Ã°Ã²Ã¨Ã­ÃªÃ¨/HeroLeft.bmp"), txLoadImage("ÃŠÃ Ã°Ã²Ã¨Ã­ÃªÃ¨/HeroRight.bmp"), txLoadImage("ÃŠÃ Ã°Ã²Ã¨Ã­ÃªÃ¨/HeroLeft.bmp")};
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
         txBegin();
@@ -34,22 +53,18 @@ int main()
         pers.movePerson();
 
         txSetColor(TX_BLACK);
-        txRectangle(1050,1,1280,110);
-        txDrawText(1050,1,1280,110, "Êèðïè÷");
+        drawButton(1050,1, "ÃŠÃ¨Ã°Ã¯Ã¨Ã·");
+        drawButton(1050,110, "Ã‚Ã®Ã¯Ã°Ã®Ã±");
+        drawButton(1050,220, "Ã’Ã°Ã³Ã¡Ã ");
+        drawButton(1050,330, "Ã„Ã¥Ã­Ã¼Ã£Ã¨");
 
-        txSetColor(TX_BLACK);
-        txRectangle(1050,110,1280,220);
-        txDrawText(1050,110,1280,220, "Çåìëÿ");
 
-        txSetColor(TX_BLACK);
-        txRectangle(1050,220,1280,330);
-        txDrawText(1050,220,1280,330, "Òðóáà");
 
         if (txMouseButtons() == 1 &&
         txMouseX() > 1050 &&  txMouseX() < 1280 &&
         txMouseY() > 1 &&  txMouseY() < 110)
         {
-        drawkirpich = true;
+        pic[0].visible = true;
 
 
          txSleep(50);
@@ -59,7 +74,7 @@ int main()
         txMouseX() > 1050 &&  txMouseX() < 1280 &&
         txMouseY() > 110 &&  txMouseY() < 220)
         {
-        drawzemlya = true;
+        pic[1].visible = true;
 
 
          txSleep(50);
@@ -69,7 +84,14 @@ int main()
         txMouseX() > 1050 &&  txMouseX() < 1280 &&
         txMouseY() > 220 &&  txMouseY() < 330)
         {
-        drawtruba = true;
+        pic[2].visible = true;
+        }
+
+        if (txMouseButtons() == 1 &&
+        txMouseX() > 1050 &&  txMouseX() < 1280 &&
+        txMouseY() > 330 &&  txMouseY() < 440)
+        {
+        pic[3].visible = true;
 
 
          txSleep(50);
@@ -92,9 +114,6 @@ int main()
         txMouseX() > 270 &&  txMouseX() < 400 &&
         txMouseY() > 1 &&  txMouseY() < 160)
         {
-
-
-
          txSleep(50);
          }
 
@@ -102,23 +121,13 @@ int main()
         txMouseX() > 530 &&  txMouseX() < 550 &&
         txMouseY() > 1 &&  txMouseY() < 160)
         {
-
-
-
          txSleep(50);
          }
+      
+         for (int i = 0; i <= 3; i++)
+            if(pic[i].visible)
+                txBitBlt(txDC(),i*200,1,250,160,pic[i].object);
 
-         if(drawkirpich)
-         txBitBlt(txDC(),1,1,250, 160,kirpich);
-
-         if(drawzemlya)
-         txBitBlt(txDC(),270,1, 400,160,zemlya);
-
-         if(drawtruba)
-         txBitBlt(txDC(),530,1,550, 160,truba);
-
-
-//
 
         txSleep(15);
         txEnd();
@@ -128,7 +137,8 @@ int main()
 
 
 
-
+        for (int i = 0; i <= 3; i++)
+        txDeleteDC(pic[i].object);
 
     return 0;
     }
