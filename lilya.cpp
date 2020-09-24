@@ -1,25 +1,42 @@
 #include "TXLib.h"
 
+struct Picture
+{
+    int x;
+    int y;
+    int width;
+    int height;
+    HDC object;
+    bool visible;
+};
 
+struct Button
+{
+    int x;
+    int y;
+    const char text[];
+};
 
-
-
-
-
-
+void drawButton(int x,int y,const char text[])
+{
+    txSetColour(TX_BLACK);
+    txRectangle(x,y,x + 200,y + 100);
+    txSelectFont("ARIAL", 40);
+    txDrawText(x,y,x + 200,y + 100,text);
+}
 
 int main()
 {
 
     txCreateWindow(1280,720);
+    txTextCursor (false);
 
+    Picture pic[100];
+    pic[0] = {1300, 250, 60, 60, txLoadImage ("Картинки/kirpich.bmp"), false};
+    pic[1] = {1300, 400, 60, 60, txLoadImage ("Картинки/вопрос.bmp"), false};
+    pic[2] = {1300, 550, 60, 120, txLoadImage ("Картинки/truba.bmp"), false};
+    pic[3] = {1300, 250, 60, 60, txLoadImage ("Картинки/money.bmp"), false};
 
-    HDC kirpich     = txLoadImage("Картинки\\kirpich.bmp");
-    HDC zemlya      = txLoadImage("Картинки\\zemlya.bmp");
-    HDC truba       = txLoadImage("Картинки\\truba.bmp");
-    bool drawkirpich = false;
-    bool drawzemlya = false;
-    bool drawtruba = false;
 
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
@@ -33,22 +50,18 @@ int main()
         txRectangle(0,0,1280,720);
 
         txSetColor(TX_BLACK);
-        txRectangle(1050,1,1280,110);
-        txDrawText(1050,1,1280,110, "Кирпич");
+        drawButton(1050,1, "Кирпич");
+        drawButton(1050,110, "Вопрос");
+        drawButton(1050,220, "Труба");
+        drawButton(1050,330, "Деньги");
 
-        txSetColor(TX_BLACK);
-        txRectangle(1050,110,1280,220);
-        txDrawText(1050,110,1280,220, "Земля");
 
-        txSetColor(TX_BLACK);
-        txRectangle(1050,220,1280,330);
-        txDrawText(1050,220,1280,330, "Труба");
 
         if (txMouseButtons() == 1 &&
         txMouseX() > 1050 &&  txMouseX() < 1280 &&
         txMouseY() > 1 &&  txMouseY() < 110)
         {
-        drawkirpich = true;
+        pic[0].visible = true;
 
 
          txSleep(50);
@@ -58,7 +71,7 @@ int main()
         txMouseX() > 1050 &&  txMouseX() < 1280 &&
         txMouseY() > 110 &&  txMouseY() < 220)
         {
-        drawzemlya = true;
+        pic[1].visible = true;
 
 
          txSleep(50);
@@ -68,7 +81,14 @@ int main()
         txMouseX() > 1050 &&  txMouseX() < 1280 &&
         txMouseY() > 220 &&  txMouseY() < 330)
         {
-        drawtruba = true;
+        pic[2].visible = true;
+        }
+
+        if (txMouseButtons() == 1 &&
+        txMouseX() > 1050 &&  txMouseX() < 1280 &&
+        txMouseY() > 330 &&  txMouseY() < 440)
+        {
+        pic[3].visible = true;
 
 
          txSleep(50);
@@ -91,9 +111,6 @@ int main()
         txMouseX() > 270 &&  txMouseX() < 400 &&
         txMouseY() > 1 &&  txMouseY() < 160)
         {
-
-
-
          txSleep(50);
          }
 
@@ -101,22 +118,11 @@ int main()
         txMouseX() > 530 &&  txMouseX() < 550 &&
         txMouseY() > 1 &&  txMouseY() < 160)
         {
-
-
-
          txSleep(50);
          }
-
-         if(drawkirpich)
-         txBitBlt(txDC(),1,1,250, 160,kirpich);
-
-         if(drawzemlya)
-         txBitBlt(txDC(),270,1, 400,160,zemlya);
-
-         if(drawtruba)
-         txBitBlt(txDC(),530,1,550, 160,truba);
-
-
+         for (int i = 0; i <= 3; i++)
+            if(pic[i].visible)
+                txBitBlt(txDC(),i*200,1,250,160,pic[i].object);
 
 
         txSleep(15);
@@ -127,7 +133,8 @@ int main()
 
 
 
-
+        for (int i = 0; i <= 3; i++)
+        txDeleteDC(pic[i].object);
 
     return 0;
     }
