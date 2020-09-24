@@ -1,4 +1,5 @@
 #include "TXLib.h"
+#include "Person.cpp"
 
 struct Picture
 {
@@ -27,7 +28,6 @@ void drawButton(int x,int y,const char text[])
 
 int main()
 {
-
     txCreateWindow(1280,720);
     txTextCursor (false);
 
@@ -37,17 +37,16 @@ int main()
     pic[2] = {1300, 550, 60, 120, txLoadImage ("Картинки/truba.bmp"), false};
     pic[3] = {1300, 250, 60, 60, txLoadImage ("Картинки/money.bmp"), false};
 
+    Person pers = {100, 150, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
+
 
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
         txBegin();
         txClear();
 
-
-
-        txSetColor(TX_WHITE);
-        txSetFillColor(TX_WHITE);
-        txRectangle(0,0,1280,720);
+        Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
+        pers.movePerson();
 
         txSetColor(TX_BLACK);
         drawButton(1050,1, "Кирпич");
@@ -58,69 +57,64 @@ int main()
 
 
         if (txMouseButtons() == 1 &&
-        txMouseX() > 1050 &&  txMouseX() < 1280 &&
-        txMouseY() > 1 &&  txMouseY() < 110)
+            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseY() > 1 &&  txMouseY() < 110)
         {
-        pic[0].visible = true;
-
-
-         txSleep(50);
-         }
-
-         if (txMouseButtons() == 1 &&
-        txMouseX() > 1050 &&  txMouseX() < 1280 &&
-        txMouseY() > 110 &&  txMouseY() < 220)
-        {
-        pic[1].visible = true;
-
-
-         txSleep(50);
-         }
-
-         if (txMouseButtons() == 1 &&
-        txMouseX() > 1050 &&  txMouseX() < 1280 &&
-        txMouseY() > 220 &&  txMouseY() < 330)
-        {
-        pic[2].visible = true;
+            pic[0].visible = true;
+            txSleep(50);
         }
 
         if (txMouseButtons() == 1 &&
-        txMouseX() > 1050 &&  txMouseX() < 1280 &&
-        txMouseY() > 330 &&  txMouseY() < 440)
+            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseY() > 110 &&  txMouseY() < 220)
         {
-        pic[3].visible = true;
+            pic[1].visible = true;
+            txSleep(50);
+        }
+
+        if (txMouseButtons() == 1 &&
+            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseY() > 220 &&  txMouseY() < 330)
+        {
+            pic[2].visible = true;
+        }
+
+        if (txMouseButtons() == 1 &&
+            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseY() > 330 &&  txMouseY() < 440)
+        {
+            pic[3].visible = true;
 
 
-         txSleep(50);
-         }
+            txSleep(50);
+        }
 
 
 
 
         if (txMouseButtons() == 1 &&
-        txMouseX() > 1 &&  txMouseX() < 250 &&
-        txMouseY() > 1 &&  txMouseY() < 160)
+            txMouseX() > 1 &&  txMouseX() < 250 &&
+            txMouseY() > 1 &&  txMouseY() < 160)
         {
-
-
-         txSleep(50);
-         }
+            txSleep(50);
+        }
 
 
         if (txMouseButtons() == 1 &&
-        txMouseX() > 270 &&  txMouseX() < 400 &&
-        txMouseY() > 1 &&  txMouseY() < 160)
+            txMouseX() > 270 &&  txMouseX() < 400 &&
+            txMouseY() > 1 &&  txMouseY() < 160)
         {
-         txSleep(50);
-         }
+            txSleep(50);
+        }
 
         if (txMouseButtons() == 1 &&
-        txMouseX() > 530 &&  txMouseX() < 550 &&
-        txMouseY() > 1 &&  txMouseY() < 160)
+            txMouseX() > 530 &&  txMouseX() < 550 &&
+            txMouseY() > 1 &&  txMouseY() < 160)
         {
-         txSleep(50);
-         }
-         for (int i = 0; i <= 3; i++)
+            txSleep(50);
+        }
+
+        for (int i = 0; i <= 3; i++)
             if(pic[i].visible)
                 txBitBlt(txDC(),i*200,1,250,160,pic[i].object);
 
@@ -133,9 +127,8 @@ int main()
 
 
 
-        for (int i = 0; i <= 3; i++)
+    for (int i = 0; i <= 3; i++)
         txDeleteDC(pic[i].object);
 
     return 0;
-    }
-
+}
