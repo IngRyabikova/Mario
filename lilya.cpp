@@ -15,7 +15,7 @@ struct Button
 {
     int x;
     int y;
-    const char text[];
+    const char* text;
 };
 
 void drawButton(int x,int y,const char text[])
@@ -31,11 +31,19 @@ int main()
     txCreateWindow(1280,720);
     txTextCursor (false);
 
+    int active_pic = -1;
+
+    int n_pics = 0;
     Picture pic[100];
-    pic[0] = {1300, 250, 60, 60, txLoadImage ("Картинки/kirpich.bmp"), false};
-    pic[1] = {1300, 400, 60, 60, txLoadImage ("Картинки/вопрос.bmp"), false};
-    pic[2] = {1300, 550, 60, 120, txLoadImage ("Картинки/truba.bmp"), false};
-    pic[3] = {1300, 250, 60, 60, txLoadImage ("Картинки/money.bmp"), false};
+    HDC kirp = txLoadImage ("Картинки/kirpich.bmp");
+    HDC quest = txLoadImage ("Картинки/вопрос.bmp");
+    HDC truba = txLoadImage ("Картинки/truba.bmp");
+    HDC money = txLoadImage ("Картинки/money.bmp");
+
+    Button btn1 = {1050,0, "Кирпич"};
+    Button btn2 = {1050,110, "Кирпич"};
+    Button btn3 = {1050,220, "Кирпич"};
+    Button btn4 = {1050,330, "Кирпич"};
 
     Person pers = {100, 150, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
 
@@ -57,33 +65,43 @@ int main()
 
 
         if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
             txMouseY() > 1 &&  txMouseY() < 110)
         {
-            pic[0].visible = true;
+            active_pic = n_pics;
+            pic[n_pics] = {300, 250, 60, 60, kirp, true};
+            n_pics = n_pics + 1;
             txSleep(50);
         }
 
         if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
             txMouseY() > 110 &&  txMouseY() < 220)
         {
-            pic[1].visible = true;
+            active_pic = n_pics;
+            pic[n_pics] = {300, 250, 60, 60, quest, true};
+            n_pics = n_pics + 1;
             txSleep(50);
         }
 
         if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
             txMouseY() > 220 &&  txMouseY() < 330)
         {
-            pic[2].visible = true;
+            active_pic = n_pics;
+            pic[n_pics] = {300, 250, 60, 60, truba, true};
+            n_pics = n_pics + 1;
+            txSleep(50);
         }
 
         if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
+            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
             txMouseY() > 330 &&  txMouseY() < 440)
         {
-            pic[3].visible = true;
+            active_pic = n_pics;
+            pic[n_pics] = {300, 250, 60, 60, money, true};
+            n_pics = n_pics + 1;
+            txSleep(50);
 
 
             txSleep(50);
@@ -114,9 +132,22 @@ int main()
             txSleep(50);
         }
 
-        for (int i = 0; i <= 3; i++)
+        for (int i = 0; i < n_pics; i++)
             if(pic[i].visible)
-                txBitBlt(txDC(),i*200,1,250,160,pic[i].object);
+                txBitBlt(txDC(), pic[i].x, pic[i].y, 250, 160, pic[i].object);
+
+
+        if (GetAsyncKeyState(VK_LEFT)  and active_pic >= 0)
+            pic[active_pic].x = pic[active_pic].x - 2;
+        if (GetAsyncKeyState(VK_RIGHT) and active_pic >= 0)
+            pic[active_pic].x = pic[active_pic].x + 2;
+        if (GetAsyncKeyState(VK_UP)    and active_pic >= 0)
+            pic[active_pic].y = pic[active_pic].y - 2;
+        if (GetAsyncKeyState(VK_DOWN)  and active_pic >= 0)
+            pic[active_pic].y = pic[active_pic].y + 2;
+
+
+
 
 
         txSleep(15);
