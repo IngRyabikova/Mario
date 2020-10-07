@@ -9,16 +9,24 @@ struct Picture
     int height;
     HDC object;
     bool visible;
+
 };
 
 struct Button
 {
     int x;
     int y;
-    const char text[];
+    const char* text;
+
+
+
+    HDC object;
+
+    //Хранить еще и картинку
+
 };
 
-void drawButton(int x,int y,const char text[])
+void drawButton(int x,int y,const char* text)
 {
     txSetColour(TX_BLACK);
     txRectangle(x,y,x + 200,y + 100);
@@ -32,10 +40,17 @@ int main()
     txTextCursor (false);
 
     Picture pic[100];
-    pic[0] = {1300, 250, 60, 60, txLoadImage ("Картинки/kirpich.bmp"), false};
-    pic[1] = {1300, 400, 60, 60, txLoadImage ("Картинки/вопрос.bmp"), false};
-    pic[2] = {1300, 550, 60, 120, txLoadImage ("Картинки/truba.bmp"), false};
-    pic[3] = {1300, 250, 60, 60, txLoadImage ("Картинки/money.bmp"), false};
+    int n_pics = 0;
+
+    //Хранить сколько картинок (0)
+
+    Button btn[4];
+    btn[0] = {1050,0, "Кирпич", txLoadImage ("Картинки/kirpich.bmp")};
+    btn[1] = {1050,110, "Вопрос",  txLoadImage ("Картинки/вопрос.bmp")};
+    btn[2] = {1050,220, "Труба", txLoadImage ("Картинки/truba.bmp")};
+    btn[3] = {1050,330, "Деньги", txLoadImage ("Картинки/money.bmp")};
+
+
 
     Person pers = {100, 150, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
 
@@ -49,45 +64,24 @@ int main()
         pers.movePerson();
 
         txSetColor(TX_BLACK);
-        drawButton(1050,1, "Кирпич");
-        drawButton(1050,110, "Вопрос");
-        drawButton(1050,220, "Труба");
-        drawButton(1050,330, "Деньги");
+        for (int i = 0; i < 4; i = i + 1)
+            drawButton(btn[i].x,btn[i].y, btn[i].text);
 
 
-
+        //Если нажал мышкой на кнопку кирпич
+         for (int i = 0; i < 4; i = i + 1)
         if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
-            txMouseY() > 1 &&  txMouseY() < 110)
+            txMouseX() > btn[i].x &&  txMouseX() < btn[i].x &&
+            txMouseY() > btn[i].y &&  txMouseY() < btn[i].y)
         {
-            pic[0].visible = true;
+            //Рисовать кирпич
+            //pic[0].visible = true;
+            pic[n_pics] = {300, 250,  60, 60, btn[i].object,true};
+            n_pics = n_pics + 1;
             txSleep(50);
+            //Создать новую картинку с кирпичом
         }
 
-        if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
-            txMouseY() > 110 &&  txMouseY() < 220)
-        {
-            pic[1].visible = true;
-            txSleep(50);
-        }
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
-            txMouseY() > 220 &&  txMouseY() < 330)
-        {
-            pic[2].visible = true;
-        }
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > 1050 &&  txMouseX() < 1280 &&
-            txMouseY() > 330 &&  txMouseY() < 440)
-        {
-            pic[3].visible = true;
-
-
-            txSleep(50);
-        }
 
 
 
@@ -114,8 +108,7 @@ int main()
             txSleep(50);
         }
 
-        for (int i = 0; i <= 3; i++)
-            if(pic[i].visible)
+        for (int i = 0; i < n_pics; i = i + 1)
                 txBitBlt(txDC(),i*200,1,250,160,pic[i].object);
 
 
