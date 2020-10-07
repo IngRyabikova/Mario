@@ -9,7 +9,6 @@ struct Picture
     int height;
     HDC object;
     bool visible;
-
 };
 
 struct Button
@@ -17,7 +16,13 @@ struct Button
     int x;
     int y;
     const char* text;
+
+
+
     HDC object;
+
+    //Хранить еще и картинку
+
 };
 
 void drawButton(int x,int y,const char* text)
@@ -33,21 +38,21 @@ int main()
     txCreateWindow(1280,720);
     txTextCursor (false);
 
+    Picture pic[100];
+    int n_pics = 0;
     int active_pic = -1;
 
-    int n_pics = 0;
-    Picture pic[100];
-  
-    //Г•Г°Г Г­ГЁГІГј Г±ГЄГ®Г«ГјГЄГ® ГЄГ Г°ГІГЁГ­Г®ГЄ (0)
+    //Хранить сколько картинок (0)
 
     Button btn[4];
-    btn[0] = {1050,0, "ГЉГЁГ°ГЇГЁГ·", txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/kirpich.bmp")};
-    btn[1] = {1050,110, "Г‚Г®ГЇГ°Г®Г±",  txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/ГўГ®ГЇГ°Г®Г±.bmp")};
-    btn[2] = {1050,220, "Г’Г°ГіГЎГ ", txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/truba.bmp")};
-    btn[3] = {1050,330, "Г„ГҐГ­ГјГЈГЁ", txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/money.bmp")};
+    btn[0] = {1050,0,   "Кирпич",   txLoadImage ("Картинки/kirpich.bmp")};
+    btn[1] = {1050,110, "Вопрос",   txLoadImage ("Картинки/вопрос.bmp")};
+    btn[2] = {1050,220, "Труба",    txLoadImage ("Картинки/truba.bmp")};
+    btn[3] = {1050,330, "Деньги",   txLoadImage ("Картинки/money.bmp")};
 
 
-    Person pers = {100, 150, 100, 0, txLoadImage("ГЉГ Г°ГІГЁГ­ГЄГЁ/HeroLeft.bmp"), txLoadImage("ГЉГ Г°ГІГЁГ­ГЄГЁ/HeroRight.bmp"), txLoadImage("ГЉГ Г°ГІГЁГ­ГЄГЁ/HeroLeft.bmp")};
+
+    Person pers = {100, 150, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
 
 
     while(!GetAsyncKeyState(VK_ESCAPE))
@@ -63,19 +68,20 @@ int main()
             drawButton(btn[i].x,btn[i].y, btn[i].text);
 
 
-        //Г…Г±Г«ГЁ Г­Г Г¦Г Г« Г¬Г»ГёГЄГ®Г© Г­Г  ГЄГ­Г®ГЇГЄГі ГЄГЁГ°ГЇГЁГ·
+        //Если нажал мышкой на кнопку кирпич
          for (int i = 0; i < 4; i = i + 1)
         if (txMouseButtons() == 1 &&
-            txMouseX() > btn[i].x &&  txMouseX() < btn[i].x &&
-            txMouseY() > btn[i].y &&  txMouseY() < btn[i].y)
+            txMouseX() > btn[i].x &&  txMouseX() < btn[i].x + 230 &&
+            txMouseY() > btn[i].y &&  txMouseY() < btn[i].y + 110)
         {
-            //ГђГЁГ±Г®ГўГ ГІГј ГЄГЁГ°ГЇГЁГ·
-            //pic[0].visible = true;
+            //Рисовать кирпич
+            active_pic = n_pics;
             pic[n_pics] = {300, 250,  60, 60, btn[i].object,true};
             n_pics = n_pics + 1;
             txSleep(50);
-            //Г‘Г®Г§Г¤Г ГІГј Г­Г®ГўГіГѕ ГЄГ Г°ГІГЁГ­ГЄГі Г± ГЄГЁГ°ГЇГЁГ·Г®Г¬
+            //Создать новую картинку с кирпичом
         }
+
 
         for (int i = 0; i < n_pics; i++)
             if(pic[i].visible)
@@ -90,7 +96,6 @@ int main()
             pic[active_pic].y = pic[active_pic].y - 2;
         if (GetAsyncKeyState(VK_DOWN)  and active_pic >= 0)
             pic[active_pic].y = pic[active_pic].y + 2;
-
 
 
         txSleep(15);
