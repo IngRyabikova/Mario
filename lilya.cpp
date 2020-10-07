@@ -9,6 +9,7 @@ struct Picture
     int height;
     HDC object;
     bool visible;
+
 };
 
 struct Button
@@ -16,9 +17,10 @@ struct Button
     int x;
     int y;
     const char* text;
+    HDC object;
 };
 
-void drawButton(int x,int y,const char text[])
+void drawButton(int x,int y,const char* text)
 {
     txSetColour(TX_BLACK);
     txRectangle(x,y,x + 200,y + 100);
@@ -35,17 +37,17 @@ int main()
 
     int n_pics = 0;
     Picture pic[100];
-    HDC kirp = txLoadImage ("Картинки/kirpich.bmp");
-    HDC quest = txLoadImage ("Картинки/вопрос.bmp");
-    HDC truba = txLoadImage ("Картинки/truba.bmp");
-    HDC money = txLoadImage ("Картинки/money.bmp");
+  
+    //Г•Г°Г Г­ГЁГІГј Г±ГЄГ®Г«ГјГЄГ® ГЄГ Г°ГІГЁГ­Г®ГЄ (0)
 
-    Button btn1 = {1050,0, "Кирпич"};
-    Button btn2 = {1050,110, "Кирпич"};
-    Button btn3 = {1050,220, "Кирпич"};
-    Button btn4 = {1050,330, "Кирпич"};
+    Button btn[4];
+    btn[0] = {1050,0, "ГЉГЁГ°ГЇГЁГ·", txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/kirpich.bmp")};
+    btn[1] = {1050,110, "Г‚Г®ГЇГ°Г®Г±",  txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/ГўГ®ГЇГ°Г®Г±.bmp")};
+    btn[2] = {1050,220, "Г’Г°ГіГЎГ ", txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/truba.bmp")};
+    btn[3] = {1050,330, "Г„ГҐГ­ГјГЈГЁ", txLoadImage ("ГЉГ Г°ГІГЁГ­ГЄГЁ/money.bmp")};
 
-    Person pers = {100, 150, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
+
+    Person pers = {100, 150, 100, 0, txLoadImage("ГЉГ Г°ГІГЁГ­ГЄГЁ/HeroLeft.bmp"), txLoadImage("ГЉГ Г°ГІГЁГ­ГЄГЁ/HeroRight.bmp"), txLoadImage("ГЉГ Г°ГІГЁГ­ГЄГЁ/HeroLeft.bmp")};
 
 
     while(!GetAsyncKeyState(VK_ESCAPE))
@@ -57,79 +59,22 @@ int main()
         pers.movePerson();
 
         txSetColor(TX_BLACK);
-        drawButton(1050,1, "Кирпич");
-        drawButton(1050,110, "Вопрос");
-        drawButton(1050,220, "Труба");
-        drawButton(1050,330, "Деньги");
+        for (int i = 0; i < 4; i = i + 1)
+            drawButton(btn[i].x,btn[i].y, btn[i].text);
 
 
-
+        //Г…Г±Г«ГЁ Г­Г Г¦Г Г« Г¬Г»ГёГЄГ®Г© Г­Г  ГЄГ­Г®ГЇГЄГі ГЄГЁГ°ГЇГЁГ·
+         for (int i = 0; i < 4; i = i + 1)
         if (txMouseButtons() == 1 &&
-            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
-            txMouseY() > 1 &&  txMouseY() < 110)
+            txMouseX() > btn[i].x &&  txMouseX() < btn[i].x &&
+            txMouseY() > btn[i].y &&  txMouseY() < btn[i].y)
         {
-            active_pic = n_pics;
-            pic[n_pics] = {300, 250, 60, 60, kirp, true};
+            //ГђГЁГ±Г®ГўГ ГІГј ГЄГЁГ°ГЇГЁГ·
+            //pic[0].visible = true;
+            pic[n_pics] = {300, 250,  60, 60, btn[i].object,true};
             n_pics = n_pics + 1;
             txSleep(50);
-        }
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
-            txMouseY() > 110 &&  txMouseY() < 220)
-        {
-            active_pic = n_pics;
-            pic[n_pics] = {300, 250, 60, 60, quest, true};
-            n_pics = n_pics + 1;
-            txSleep(50);
-        }
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
-            txMouseY() > 220 &&  txMouseY() < 330)
-        {
-            active_pic = n_pics;
-            pic[n_pics] = {300, 250, 60, 60, truba, true};
-            n_pics = n_pics + 1;
-            txSleep(50);
-        }
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > btn1.x &&  txMouseX() < btn1.x + 230 &&
-            txMouseY() > 330 &&  txMouseY() < 440)
-        {
-            active_pic = n_pics;
-            pic[n_pics] = {300, 250, 60, 60, money, true};
-            n_pics = n_pics + 1;
-            txSleep(50);
-
-
-            txSleep(50);
-        }
-
-
-
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > 1 &&  txMouseX() < 250 &&
-            txMouseY() > 1 &&  txMouseY() < 160)
-        {
-            txSleep(50);
-        }
-
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > 270 &&  txMouseX() < 400 &&
-            txMouseY() > 1 &&  txMouseY() < 160)
-        {
-            txSleep(50);
-        }
-
-        if (txMouseButtons() == 1 &&
-            txMouseX() > 530 &&  txMouseX() < 550 &&
-            txMouseY() > 1 &&  txMouseY() < 160)
-        {
-            txSleep(50);
+            //Г‘Г®Г§Г¤Г ГІГј Г­Г®ГўГіГѕ ГЄГ Г°ГІГЁГ­ГЄГі Г± ГЄГЁГ°ГЇГЁГ·Г®Г¬
         }
 
         for (int i = 0; i < n_pics; i++)
@@ -145,8 +90,6 @@ int main()
             pic[active_pic].y = pic[active_pic].y - 2;
         if (GetAsyncKeyState(VK_DOWN)  and active_pic >= 0)
             pic[active_pic].y = pic[active_pic].y + 2;
-
-
 
 
 
