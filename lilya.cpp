@@ -43,12 +43,13 @@ int main()
     int active_pic = -1;
 
     //Хранить сколько картинок (0)
-
-    Button btn[4];
+    const int COUNT_BTN = 5;
+    Button btn[COUNT_BTN];
     btn[0] = {1050,0,   "Кирпич",   txLoadImage ("Картинки/kirpich.bmp")};
     btn[1] = {1050,110, "Вопрос",   txLoadImage ("Картинки/вопрос.bmp")};
     btn[2] = {1050,220, "Труба",    txLoadImage ("Картинки/truba.bmp")};
     btn[3] = {1050,330, "Деньги",   txLoadImage ("Картинки/money.bmp")};
+    btn[4] = {1050,440, "Огонь",    txLoadImage ("Картинки/fire.bmp")};
 
 
 
@@ -64,12 +65,12 @@ int main()
         pers.movePerson();
 
         txSetColor(TX_BLACK);
-        for (int i = 0; i < 4; i = i + 1)
+        for (int i = 0; i < COUNT_BTN; i = i + 1)
             drawButton(btn[i].x,btn[i].y, btn[i].text);
 
 
         //Если нажал мышкой на кнопку кирпич
-         for (int i = 0; i < 4; i = i + 1)
+         for (int i = 0; i < COUNT_BTN; i = i + 1)
         if (txMouseButtons() == 1 &&
             txMouseX() > btn[i].x &&  txMouseX() < btn[i].x + 230 &&
             txMouseY() > btn[i].y &&  txMouseY() < btn[i].y + 110)
@@ -98,6 +99,15 @@ int main()
             pic[active_pic].y = pic[active_pic].y + 2;
 
 
+        if (GetAsyncKeyState(VK_SPACE))
+        {
+            for (int i = 0; i < n_pics; i++)
+            {
+                pic[active_pic].x = round(pic[active_pic].x/30)*30;
+                pic[active_pic].y = round(pic[active_pic].y/30)*30;
+            }
+        }
+
         txSleep(15);
         txEnd();
     }
@@ -106,7 +116,7 @@ int main()
 
 
 
-    for (int i = 0; i <= 3; i++)
+    for (int i = 0; i < n_pics; i++)
         txDeleteDC(pic[i].object);
 
     return 0;
