@@ -1,5 +1,7 @@
 #include "TXLib.h"
 #include "Person.cpp"
+#include <fstream>
+using namespace std;
 
 struct Picture
 {
@@ -7,6 +9,7 @@ struct Picture
     int y;
     int width;
     int height;
+    string address;
     HDC object;
     bool visible;
 };
@@ -18,7 +21,7 @@ struct Button
     const char* text;
 
 
-
+    string address;
     HDC object;
 
     //Хранить еще и картинку
@@ -46,11 +49,11 @@ int main()
     //Хранить сколько картинок (0)
     const int COUNT_BTN = 5;
     Button btn[COUNT_BTN];
-    btn[0] = {1050,0,   "Кирпич",   txLoadImage ("Картинки/kirpich.bmp")};
-    btn[1] = {1050,110, "Вопрос",   txLoadImage ("Картинки/вопрос.bmp")};
-    btn[2] = {1050,220, "Труба",    txLoadImage ("Картинки/truba.bmp")};
-    btn[3] = {1050,330, "Деньги",   txLoadImage ("Картинки/money.bmp")};
-    btn[4] = {1050,440, "Огонь",    txLoadImage ("Картинки/fire.bmp")};
+    btn[0] = {1050,0,   "Кирпич",   "Картинки/kirpich.bmp", txLoadImage ("Картинки/kirpich.bmp")};
+    btn[1] = {1050,110, "Вопрос",   "Картинки/вопрос.bmp", txLoadImage ("Картинки/вопрос.bmp")};
+    btn[2] = {1050,220, "Труба",    "Картинки/truba.bmp", txLoadImage ("Картинки/truba.bmp")};
+    btn[3] = {1050,330, "Деньги",   "Картинки/money.bmp", txLoadImage ("Картинки/money.bmp")};
+    btn[4] = {1050,440, "Огонь",    "Картинки/fire.bmp", txLoadImage ("Картинки/fire.bmp")};
 
 
 
@@ -105,7 +108,7 @@ int main()
             {
                 //Рисовать кирпич
                 active_pic = n_pics;
-                pic[n_pics] = {300, 250,  60, 60, btn[i].object,true};
+                pic[n_pics] = {300, 250,  60, 60, btn[i].address, btn[i].object,true};
                 n_pics = n_pics + 1;
                 txSleep(50);
                 //Создать новую картинку с кирпичом
@@ -156,8 +159,8 @@ int main()
             {
                 for (int i = 0; i < n_pics; i++)
                 {
-                    pic[i].x = round(pic[i].x/30)*30;
-                    pic[i].y = round(pic[i].y/30)*30;
+                    pic[i].x = round(pic[i].x/60)*60;
+                    pic[i].y = round(pic[i].y/60)*60;
                 }
             }
         }
@@ -169,7 +172,19 @@ int main()
     }
 
 
+    //Открыть файл
+    ofstream file("1.txt");
 
+    //Пробежать по всем картинкам
+    for (int i = 0; i < n_pics; i++)
+    {
+        //И сохранить вот это
+        file << pic[i].x << endl;
+
+        file << pic[i].y << endl;
+
+        file << pic[i].address << endl;
+    }
 
 
     for (int i = 0; i < n_pics; i++)
