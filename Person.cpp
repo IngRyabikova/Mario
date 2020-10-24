@@ -4,6 +4,7 @@ struct Person
 {
     int x;
     int y;
+    float vy;
     int personLife;
     int frame;
     HDC personLeft;

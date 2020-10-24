@@ -57,7 +57,7 @@ int main()
 
 
 
-    Person pers = {100, 150, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
+    Person pers = {100, 150, -10, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
 
 
     while(!GetAsyncKeyState(VK_ESCAPE))
@@ -70,6 +70,10 @@ int main()
 
         if (PAGE == "Режим игры")
         {
+            txSetColor(RGB(115,115,115));
+            txSetFillColor(RGB(115,115,115));
+            txRectangle(0, 500, 1500, 800);
+
             txDrawText(1050, 550, 1250, 650, "Режим редактора");
 
             Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
@@ -82,6 +86,19 @@ int main()
                 PAGE = "Режим редактора";
                 txSleep(200);
             }
+
+            gravityPerson(&pers);
+
+
+
+            if (GetAsyncKeyState('J')) {
+                pers.vy = -10;
+            }
+
+            pers.vy = pers.vy + 0.5;
+            pers.y = pers.y + pers.vy;
+            if (pers.y > 500)
+                pers.y = 500;
         }
         if (PAGE == "Режим редактора")
         {
@@ -155,7 +172,7 @@ int main()
             }
 
 
-            if (GetAsyncKeyState(VK_SPACE))
+            if (GetAsyncKeyState('B'))
             {
                 for (int i = 0; i < n_pics; i++)
                 {
