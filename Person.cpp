@@ -28,7 +28,8 @@ struct Person
 
 void gravityPerson(Person *pers)
 {
-    pers->y = pers->y + 9;
+    if (pers->vy > 10)
+        pers->vy = 10;
 
     int x = pers->x - 40;
     while (x < pers->x + 40)
