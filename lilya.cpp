@@ -96,6 +96,7 @@ int main()
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
         txBegin();
+        txSetFillColor(TX_WHITE);
         txClear();
 
         txSetColor(TX_BLACK, 5);
@@ -109,11 +110,34 @@ int main()
             txSetFillColor(RGB(115,115,115));
             txRectangle(0, 500, 1500, 800);
 
-
             //Картинки с файла
             for (int i = 0; i < n_gamePicss; i++)
                 if(gamePics[i].visible)
                     txBitBlt(txDC(), gamePics[i].x, gamePics[i].y, 250, 160, gamePics[i].object);
+
+            for (int i = 0; i < n_pics; i++)
+            {
+                if(pic[i].visible && pic[i].address == "Картинки/kirpich.bmp")
+                {
+                    txSetColor(RGB(115,115,115));
+                    txSetFillColor(RGB(115,115,115));
+                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                }
+
+                if(pic[i].visible && pic[i].address == "Картинки/money.bmp")
+                {
+                    txSetColor(RGB(245,136,46));
+                    txSetFillColor(RGB(245,136,46));
+                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                }
+
+                if(pic[i].visible && pic[i].address == "Картинки/fire.bmp")
+                {
+                    txSetColor(RGB(255,36,36));
+                    txSetFillColor(RGB(255,36,36));
+                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                }
+            }
 
             txSetColor(TX_BLACK);
             txDrawText(1050, 550, 1250, 650, "Режим редактора");
@@ -161,7 +185,7 @@ int main()
 
 
             //Если нажал мышкой на кнопку кирпич
-             for (int i = 0; i < COUNT_BTN; i = i + 1)
+            for (int i = 0; i < COUNT_BTN; i = i + 1)
             if (txMouseButtons() == 1 &&
                 txMouseX() > btn[i].x &&  txMouseX() < btn[i].x + 230 &&
                 txMouseY() > btn[i].y &&  txMouseY() < btn[i].y + 110)
@@ -208,7 +232,7 @@ int main()
             }
 
             //Отпустили мышку
-            if(txMouseButtons() == 0)
+            if(txMouseButtons() == 0 && active_pic >= 0)
             {
                 pic[active_pic].x = round(pic[active_pic].x/30)*30;
                 pic[active_pic].y = round(pic[active_pic].y/30)*30;
