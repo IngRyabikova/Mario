@@ -60,6 +60,39 @@ int main()
     Person pers = {100, 150, -10, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
 
 
+    Picture gamePics[100];
+    int n_gamePicss = 0;
+    string strokaX;
+    string strokaY;
+    string address;
+
+    //Прочитал первую строку
+    ifstream file("2.txt");
+    while (file.good())
+    {
+        //Строка1 (x)
+        getline(file, strokaX);
+        gamePics[n_gamePicss].x = atoi(strokaX.c_str());
+
+
+        //Строка2 (y)
+        getline(file, strokaY);
+        gamePics[n_gamePicss].y = atoi(strokaY.c_str());
+
+
+        //Строка3 (адрес)
+        getline(file, address);
+        gamePics[n_gamePicss].address = address;
+        gamePics[n_gamePicss].object = txLoadImage(address.c_str());
+
+        gamePics[n_gamePicss].width = 60;
+        gamePics[n_gamePicss].height = 60;
+        gamePics[n_gamePicss].visible = true;
+        n_gamePicss = n_gamePicss + 1;
+    }
+
+    file.close();
+
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
         txBegin();
@@ -70,10 +103,19 @@ int main()
 
         if (PAGE == "Режим игры")
         {
+            txSetFillColor(TX_WHITE);
+            txClear();
             txSetColor(RGB(115,115,115));
             txSetFillColor(RGB(115,115,115));
             txRectangle(0, 500, 1500, 800);
 
+
+            //Картинки с файла
+            for (int i = 0; i < n_gamePicss; i++)
+                if(gamePics[i].visible)
+                    txBitBlt(txDC(), gamePics[i].x, gamePics[i].y, 250, 160, gamePics[i].object);
+
+            txSetColor(TX_BLACK);
             txDrawText(1050, 550, 1250, 650, "Режим редактора");
 
             Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
@@ -117,6 +159,7 @@ int main()
             }
 
 
+
             //Если нажал мышкой на кнопку кирпич
              for (int i = 0; i < COUNT_BTN; i = i + 1)
             if (txMouseButtons() == 1 &&
@@ -135,6 +178,7 @@ int main()
             for (int i = 0; i < n_pics; i++)
                 if(pic[i].visible)
                     txBitBlt(txDC(), pic[i].x, pic[i].y, 250, 160, pic[i].object);
+
 
             //Выбор активной картинки
             for (int i = 0; i < n_pics; i++)
@@ -190,18 +234,20 @@ int main()
 
 
     //Открыть файл
-    ofstream file("1.txt");
+    ofstream file2("1.txt");
 
     //Пробежать по всем картинкам
     for (int i = 0; i < n_pics; i++)
     {
         //И сохранить вот это
-        file << pic[i].x << endl;
+        file2 << pic[i].x << endl;
 
-        file << pic[i].y << endl;
+        file2 << pic[i].y << endl;
 
-        file << pic[i].address << endl;
+        file2 << pic[i].address << endl;
     }
+
+    file2.close();
 
 
     for (int i = 0; i < n_pics; i++)
