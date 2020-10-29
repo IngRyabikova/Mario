@@ -63,6 +63,7 @@ int main()
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
         txBegin();
+        txSetFillColor(TX_WHITE);
         txClear();
 
         txSetColor(TX_BLACK, 5);
@@ -74,6 +75,31 @@ int main()
             txSetFillColor(RGB(115,115,115));
             txRectangle(0, 500, 1500, 800);
 
+            for (int i = 0; i < n_pics; i++)
+            {
+                if(pic[i].visible && pic[i].address == "Картинки/kirpich.bmp")
+                {
+                    txSetColor(RGB(115,115,115));
+                    txSetFillColor(RGB(115,115,115));
+                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                }
+
+                if(pic[i].visible && pic[i].address == "Картинки/money.bmp")
+                {
+                    txSetColor(RGB(245,136,46));
+                    txSetFillColor(RGB(245,136,46));
+                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                }
+
+                if(pic[i].visible && pic[i].address == "Картинки/fire.bmp")
+                {
+                    txSetColor(RGB(255,36,36));
+                    txSetFillColor(RGB(255,36,36));
+                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                }
+            }
+
+            txSetColor(TX_BLACK);
             txDrawText(1050, 550, 1250, 650, "Режим редактора");
 
             Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
