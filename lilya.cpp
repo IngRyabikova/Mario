@@ -45,6 +45,8 @@ int main()
     int n_pics = 0;
     int active_pic = -1;
     const char* PAGE = "Режим игры";
+    int points = 0;
+
 
     //Хранить сколько картинок (0)
     const int COUNT_BTN = 5;
@@ -137,10 +139,34 @@ int main()
                     txSetFillColor(RGB(255,36,36));
                     txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
                 }
+
+
+                if (pic[i].x      < pers.x + 60 and
+                    pic[i].x + 60 > pers.x and
+                    pic[i].y      < pers.y + 70 and
+                    pic[i].visible and
+                    pic[i].y + 60 > pers.y and
+                    pic[i].address == "Картинки/money.bmp")
+                {
+                    pic[i].visible = false;
+                    points = points + 20;
+                }
+
             }
 
             txSetColor(TX_BLACK);
             txDrawText(1050, 550, 1250, 650, "Режим редактора");
+
+
+            txSelectFont("Arial", 16);
+            txSetFillColor (TX_GRAY);
+            txRectangle (0, txGetExtentY() - 40, txGetExtentX(), txGetExtentY());
+
+            txSetColor (TX_WHITE);
+            char stroka [100];
+            sprintf(stroka, "Очков: %d", points);
+            txDrawText (30, txGetExtentY() - 40, 200, txGetExtentY(), stroka);
+
 
             Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
             pers.movePerson();
