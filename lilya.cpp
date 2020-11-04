@@ -108,67 +108,46 @@ int main()
         {
             txSetFillColor(TX_WHITE);
             txClear();
-            txSetColor(RGB(115,115,115));
-            txSetFillColor(RGB(115,115,115));
-            txRectangle(0, 500, 1500, 800);
 
-            //Картинки с файла
+            //Рисование квадратов
             for (int i = 0; i < n_gamePicss; i++)
-                if(gamePics[i].visible)
-                    txBitBlt(txDC(), gamePics[i].x, gamePics[i].y, 250, 160, gamePics[i].object);
-
-            for (int i = 0; i < n_pics; i++)
             {
-                if(pic[i].visible && pic[i].address == "Картинки/kirpich.bmp")
+                if(gamePics[i].visible && gamePics[i].address == "Картинки/kirpich.bmp")
                 {
                     txSetColor(RGB(115,115,115));
                     txSetFillColor(RGB(115,115,115));
-                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
-                if(pic[i].visible && pic[i].address == "Картинки/money.bmp")
+                if(gamePics[i].visible && gamePics[i].address == "Картинки/money.bmp")
                 {
                     txSetColor(RGB(245,136,46));
                     txSetFillColor(RGB(245,136,46));
-                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
-                if(pic[i].visible && pic[i].address == "Картинки/fire.bmp")
+                if(gamePics[i].visible && gamePics[i].address == "Картинки/fire.bmp")
                 {
                     txSetColor(RGB(255,36,36));
                     txSetFillColor(RGB(255,36,36));
-                    txRectangle(pic[i].x, pic[i].y, pic[i].x + 60, pic[i].y + 60);
+                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
 
-                if (pic[i].x      < pers.x + 60 and
-                    pic[i].x + 60 > pers.x and
-                    pic[i].y      < pers.y + 70 and
-                    pic[i].visible and
-                    pic[i].y + 60 > pers.y and
-                    pic[i].address == "Картинки/money.bmp")
+                if (gamePics[i].x      < pers.x + 60 and
+                    gamePics[i].x + 60 > pers.x and
+                    gamePics[i].y      < pers.y + 70 and
+                    gamePics[i].visible and
+                    gamePics[i].y + 60 > pers.y and
+                    gamePics[i].address == "Картинки/money.bmp")
                 {
-                    pic[i].visible = false;
+                    gamePics[i].visible = false;
                     points = points + 20;
                 }
 
             }
 
-            txSetColor(TX_BLACK);
-            txDrawText(1050, 550, 1250, 650, "Режим редактора");
-
-
-            txSelectFont("Arial", 16);
-            txSetFillColor (TX_GRAY);
-            txRectangle (0, txGetExtentY() - 40, txGetExtentX(), txGetExtentY());
-
-            txSetColor (TX_WHITE);
-            char stroka [100];
-            sprintf(stroka, "Очков: %d", points);
-            txDrawText (30, txGetExtentY() - 40, 200, txGetExtentY(), stroka);
-
-
-            Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
+            //Игровая логика
             pers.movePerson();
 
             if (txMouseButtons() == 1 &&
@@ -191,6 +170,34 @@ int main()
             pers.y = pers.y + pers.vy;
             if (pers.y > 500)
                 pers.y = 500;
+
+
+            txSetFillColor(TX_WHITE);
+            txClear();
+            txSetColor(RGB(115,115,115));
+            txSetFillColor(RGB(115,115,115));
+            txRectangle(0, 500, 1500, 800);
+
+            txSetColor(TX_BLACK);
+            txDrawText(1050, 550, 1250, 650, "Режим редактора");
+
+
+            txSelectFont("Arial", 16);
+            txSetFillColor (TX_GRAY);
+            txRectangle (0, txGetExtentY() - 40, txGetExtentX(), txGetExtentY());
+
+            txSetColor (TX_WHITE);
+            char stroka [100];
+            sprintf(stroka, "Очков: %d", points);
+            txDrawText (30, txGetExtentY() - 40, 200, txGetExtentY(), stroka);
+
+            Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
+
+            //Рисование кирпичей, монет и т.д.
+            for (int i = 0; i < n_gamePicss; i++)
+                if(gamePics[i].visible)
+                    txBitBlt(txDC(), gamePics[i].x, gamePics[i].y, 250, 160, gamePics[i].object);
+
         }
         if (PAGE == "Режим редактора")
         {
