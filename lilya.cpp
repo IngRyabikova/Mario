@@ -47,7 +47,6 @@ int main()
     const char* PAGE = "Режим игры";
     int points = 0;
 
-
     //Хранить сколько картинок (0)
     const int COUNT_BTN = 5;
     Button btn[COUNT_BTN];
@@ -108,6 +107,14 @@ int main()
         {
             txSetFillColor(TX_WHITE);
             txClear();
+
+
+            if (pers.x >= 700)
+            {
+                txMessageBox("Ты победил");
+                break;
+            }
+
 
             //Рисование квадратов
             for (int i = 0; i < n_gamePicss; i++)
