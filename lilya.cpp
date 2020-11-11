@@ -140,6 +140,20 @@ int main()
                     txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
+                if(gamePics[i].visible && gamePics[i].address == "Картинки/truba.bmp")
+                {
+                    txSetColor(RGB(128,255,128));
+                    txSetFillColor(RGB(128,255,128));
+                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60  );
+                }
+
+                if(gamePics[i].visible && gamePics[i].address == "Картинки/vopros.bmp")
+                {
+                    txSetColor(RGB(255,128,64));
+                    txSetFillColor(RGB(255,128,64));
+                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                }
+
 
                 if (gamePics[i].x      < pers.x + 60 and
                     gamePics[i].x + 60 > pers.x and
