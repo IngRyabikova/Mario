@@ -1,6 +1,8 @@
 #include "TXLib.h"
 #include "Person.cpp"
 #include <fstream>
+#include <iostream>
+#include "dirent.h"
 using namespace std;
 
 struct Picture
@@ -44,7 +46,7 @@ int main()
     Picture pic[100];
     int n_pics = 0;
     int active_pic = -1;
-    const char* PAGE = "Режим игры";
+    const char* PAGE = "Режим меню";
     int points = 0;
 
     //Хранить сколько картинок (0)
@@ -103,6 +105,49 @@ int main()
         txSetColor(TX_BLACK, 5);
         Win32::RoundRect (txDC(), 1050, 550, 1250, 650, 30, 30);
 
+        if(PAGE == "Режим меню")
+        {
+            int x = 100;
+            int y = 200;
+            setlocale(LC_ALL, "Russian");
+            DIR *dir;
+            struct dirent *ent;
+            if ((dir = opendir (".")) != NULL) {
+            /* print all the files and directories within directory */
+                while ((ent = readdir (dir)) != NULL) {
+                    string str = ent->d_name;
+                    str = "" + str;
+
+                    if (str.find(".txt") != -1)
+                    {
+                        Win32::RoundRect(txDC(), x, y, x + 100, y + 100, 30, 30);
+                        txDrawText(x, y, x + 100, y + 100, ent->d_name);
+
+                        if (txMouseButtons() == 1 &&
+                            txMouseX() > x &&  txMouseX() < x + 100 &&
+                            txMouseY() > y &&  txMouseY() < y + 200)
+                        {
+                            PAGE = "Режим игры";
+                            txSleep(200);
+                        }
+
+
+
+                        x = x + 100;
+
+                        if (x > 700)
+                        {
+                            y = y + 150;
+                            x = 100;
+                        }
+                    }
+
+                }
+
+                closedir (dir);
+            }
+
+        }
         if (PAGE == "Режим игры")
         {
             txSetFillColor(TX_WHITE);
