@@ -301,23 +301,22 @@ int main()
                     pic[i].x = round(pic[i].x/60)*60;
                     pic[i].y = round(pic[i].y/60)*60;
                 }
+
             }
-        }
-
-
-
-        txSleep(15);
-        txEnd();
-    }
 
 
     //Открыть файл
-    ofstream file2("1.txt");
+    txRectangle(2,2, 200, 60);
+    txDrawText(2,2,200,60, "Открыть", 5);
+    if (txMouseButtons() == 1 &&
+                txMouseX() > 2 &&  txMouseY() > 2 &&
+                txMouseX() < 200 &&  txMouseY() < 60)
+        {
 
-    //Пробежать по всем картинкам
+    ofstream file2("1.txt");
     for (int i = 0; i < n_pics; i++)
     {
-        //И сохранить вот это
+
         file2 << pic[i].x << endl;
 
         file2 << pic[i].y << endl;
@@ -326,6 +325,32 @@ int main()
     }
 
     file2.close();
+
+
+
+        txMessageBox("Ehf");
+        }
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+        txSleep(15);
+        txEnd();
+    }
+
+
+    //Пробежать по всем картинкам
+
+
 
 
     for (int i = 0; i < n_pics; i++)
