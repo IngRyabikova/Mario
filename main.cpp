@@ -10,7 +10,7 @@ int main()
     txCreateWindow(800, 600);
     txSetColor(TX_BLACK);
 
-           int x = 100;
+    int x = 100;
    setlocale(LC_ALL, "Russian");
    DIR *dir;
    struct dirent *ent;
