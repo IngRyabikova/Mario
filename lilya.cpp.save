@@ -377,12 +377,11 @@ int main()
 
             // Покажем диалоговое окно Открыть (Open).
 
-            if (GetSaveFileName(&ofn))
+            if (GetOpenFileName(&ofn))
             {
                 string fileName = ofn.lpstrFile;
-
-                ofstream file2(fileName);
-
+        
+                    ofstream file2();
                 for (int i = 0; i < n_pics; i++)
                 {
 
