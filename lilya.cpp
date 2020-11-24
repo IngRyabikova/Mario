@@ -44,6 +44,8 @@ int main()
     txCreateWindow(1280,720);
     txTextCursor (false);
 
+    int central_x = 0;
+
     Picture pic[100];
     int n_pics = 0;
     int active_pic = -1;
@@ -106,6 +108,7 @@ int main()
         txSetColor(TX_BLACK, 5);
         Win32::RoundRect (txDC(), 1050, 550, 1250, 650, 30, 30);
 
+
         if(PAGE == "Режим меню")
         {
             int x = 100;
@@ -155,7 +158,7 @@ int main()
             txClear();
 
 
-            if (pers.x >= 700)
+            if (pers.x >= 1500)
             {
                 txMessageBox("Ты победил");
                 break;
@@ -176,28 +179,28 @@ int main()
                 {
                     txSetColor(RGB(245,136,46));
                     txSetFillColor(RGB(245,136,46));
-                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
                 if(gamePics[i].visible && gamePics[i].address == "Картинки/fire.bmp")
                 {
                     txSetColor(RGB(255,36,36));
                     txSetFillColor(RGB(255,36,36));
-                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
                 if(gamePics[i].visible && gamePics[i].address == "Картинки/truba.bmp")
                 {
                     txSetColor(RGB(128,255,128));
                     txSetFillColor(RGB(128,255,128));
-                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60  );
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60  );
                 }
 
                 if(gamePics[i].visible && gamePics[i].address == "Картинки/vopros.bmp")
                 {
                     txSetColor(RGB(255,128,64));
                     txSetFillColor(RGB(255,128,64));
-                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
 
@@ -216,6 +219,16 @@ int main()
 
             //Игровая логика
             pers.movePerson();
+
+            if (pers.x < 100)
+            {
+                central_x = central_x - 5;
+            }
+
+            if (pers.x > 900)
+            {
+                central_x = central_x + 5;
+            }
 
             if (txMouseButtons() == 1 &&
                 txMouseX() > 1050 &&  txMouseX() < 1250 &&
@@ -258,16 +271,33 @@ int main()
             sprintf(stroka, "Очков: %d", points);
             txDrawText (30, txGetExtentY() - 40, 200, txGetExtentY(), stroka);
 
-            Win32::TransparentBlt (txDC(), pers.x - 50, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
+            Win32::TransparentBlt (txDC(), pers.x - 50 - central_x, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
 
             //Рисование кирпичей, монет и т.д.
             for (int i = 0; i < n_gamePicss; i++)
                 if(gamePics[i].visible)
-                    txBitBlt(txDC(), gamePics[i].x, gamePics[i].y, 250, 160, gamePics[i].object);
+                    txBitBlt(txDC(), gamePics[i].x - central_x, gamePics[i].y, 250, 160, gamePics[i].object);
 
         }
         if (PAGE == "Режим редактора")
         {
+            txSetFillColor(TX_YELLOW);
+            Win32::RoundRect (txDC(), 200, 600, 300, 700, 30, 30);
+            Win32::RoundRect (txDC(), 900, 600, 1000, 700, 30, 30);
+            if (txMouseButtons() == 1 &&
+                txMouseX() > 200 &&  txMouseX() < 300 &&
+                txMouseY() > 600 &&  txMouseY() < 700)
+            {
+                central_x = central_x + 5;
+            }
+
+            if (txMouseButtons() == 1 &&
+                txMouseX() > 900 &&  txMouseX() < 1000 &&
+                txMouseY() > 600 &&  txMouseY() < 700)
+            {
+                central_x = central_x - 5;
+            }
+
             txDrawText(1050, 550, 1250, 650, "Режим игры");
 
             txSetColor(TX_BLACK);
@@ -301,7 +331,7 @@ int main()
 
             for (int i = 0; i < n_pics; i++)
                 if(pic[i].visible)
-                    txBitBlt(txDC(), pic[i].x, pic[i].y, 250, 160, pic[i].object);
+                    txBitBlt(txDC(), pic[i].x - central_x, pic[i].y, 250, 160, pic[i].object);
 
 
             //Выбор активной картинки
