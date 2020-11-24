@@ -61,6 +61,7 @@ int main()
 
 
 
+
     Person pers = {100, 150, -10, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
 
 
@@ -155,11 +156,27 @@ int main()
             txClear();
 
 
+
             if (pers.x >= 700)
             {
                 txMessageBox("Ты победил");
                 break;
             }
+
+            if (pers.y <= -40)
+            {
+               txMessageBox("Ты проиграл");
+                break;
+
+            }
+
+            if (pers.x <= -40)
+            {
+               txMessageBox("Не в ту сторону, вернись обратно");
+                break;
+
+            }
+
 
 
             //Рисование квадратов
@@ -264,6 +281,10 @@ int main()
             for (int i = 0; i < n_gamePicss; i++)
                 if(gamePics[i].visible)
                     txBitBlt(txDC(), gamePics[i].x, gamePics[i].y, 250, 160, gamePics[i].object);
+
+
+
+
 
         }
         if (PAGE == "Режим редактора")
