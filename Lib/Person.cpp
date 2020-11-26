@@ -21,7 +21,7 @@ struct Person
         }
         else if (GetAsyncKeyState(VK_RIGHT))
         {
-            x = x + 3;
+            x = x + 30;
             person = personRight;
         }
     }
