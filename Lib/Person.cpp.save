@@ -12,7 +12,7 @@ struct Person
     HDC person;
 
     //Какая из двух функций движения используется?
-    void movePerson()
+    void movePerson(Person *pers)
     {
         if (GetAsyncKeyState(VK_LEFT))
         {
@@ -26,18 +26,23 @@ struct Person
         }
 
         else if (GetAsyncKeyState(VK_SPACE) &&
-            y > 100)
-        {
-            y = y - 25;
-        }
-
-        else if (frame >= 7)
-        {
-            frame = 0;
-        }
+        pers->y > 100)
+    {
+        pers->y = pers->y - 25;
     }
-};
+    
+    
+    
+    
+    
 
+
+    else if (pers->frame >= 7)
+    {
+        pers->frame = 0;
+    }
+    
+    
 void gravityPerson(Person *pers)
 {
     if (pers->vy > 10)
@@ -81,7 +86,7 @@ void gravityPerson(Person *pers)
             y = y + 10;
         }
         x = x + 10;
-    }
-
+    
 }
 
+   

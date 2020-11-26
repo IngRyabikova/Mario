@@ -8,9 +8,9 @@ struct Button
 
     string address;
     HDC object;
-};
-
-void drawButton(int x,int y,const char* text)
+    };
+    
+    void drawButton(int x,int y,const char* text)
 {
     txSetColour(TX_BLACK);
     txRectangle(x,y,x + 200,y + 100);
