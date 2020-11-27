@@ -1,4 +1,6 @@
 #include "TXLib.h"
+#include "Lib/Button.cpp"
+#include "Lib/Picture.cpp"
 #include "Lib/Files.cpp"
 #include "Lib/Person.cpp"
 #include <fstream>
@@ -6,39 +8,6 @@
 #include "dirent.h"
 #include "windows.h"
 using namespace std;
-
-struct Picture
-{
-    int x;
-    int y;
-    int width;
-    int height;
-    string address;
-    HDC object;
-    bool visible;
-};
-
-struct Button
-{
-    int x;
-    int y;
-    const char* text;
-
-
-    string address;
-    HDC object;
-
-    //Хранить еще и картинку
-
-};
-
-void drawButton(int x,int y,const char* text)
-{
-    txSetColour(TX_BLACK);
-    txRectangle(x,y,x + 200,y + 100);
-    txSelectFont("ARIAL", 40);
-    txDrawText(x,y,x + 200,y + 100,text);
-}
 
 int main()
 {
