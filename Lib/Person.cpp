@@ -58,7 +58,7 @@ void gravityPerson(Person *pers)
             if (txGetPixel(x, y) == RGB(128,255,128))
             {
                 pers->y=pers->y - 9;
-                pers->y=pers->y + 20;
+                //pers->y=pers->y + 20;
                 break;
             }
 
@@ -75,13 +75,8 @@ void gravityPerson(Person *pers)
 
              }
 
-
-
-
             y = y + 10;
         }
         x = x + 10;
     }
-
 }
-

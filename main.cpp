@@ -1,43 +1,13 @@
 #include "TXLib.h"
+#include "Lib/Button.cpp"
+#include "Lib/Picture.cpp"
+#include "Lib/Files.cpp"
 #include "Lib/Person.cpp"
 #include <fstream>
 #include <iostream>
 #include "dirent.h"
 #include "windows.h"
 using namespace std;
-
-struct Picture
-{
-    int x;
-    int y;
-    int width;
-    int height;
-    string address;
-    HDC object;
-    bool visible;
-};
-
-struct Button
-{
-    int x;
-    int y;
-    const char* text;
-
-
-    string address;
-    HDC object;
-
-    //Хранить еще и картинку
-
-};
-
-void drawButton(int x,int y,const char* text)
-{
-    txSetColour(TX_BLACK);
-    txRectangle(x,y,x + 200,y + 100);
-    txSelectFont("ARIAL", 40);
-    txDrawText(x,y,x + 200,y + 100,text);
-}
 
 int main()
 {
@@ -73,32 +43,7 @@ int main()
     string strokaY;
     string address;
 
-    //Прочитал первую строку
-    ifstream file("2.txt");
-    while (file.good())
-    {
-        //Строка1 (x)
-        getline(file, strokaX);
-        gamePics[n_gamePicss].x = atoi(strokaX.c_str());
 
-
-        //Строка2 (y)
-        getline(file, strokaY);
-        gamePics[n_gamePicss].y = atoi(strokaY.c_str());
-
-
-        //Строка3 (адрес)
-        getline(file, address);
-        gamePics[n_gamePicss].address = address;
-        gamePics[n_gamePicss].object = txLoadImage(address.c_str());
-
-        gamePics[n_gamePicss].width = 60;
-        gamePics[n_gamePicss].height = 60;
-        gamePics[n_gamePicss].visible = true;
-        n_gamePicss = n_gamePicss + 1;
-    }
-
-    file.close();
 
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
@@ -108,6 +53,7 @@ int main()
 
         txSetColor(TX_BLACK, 5);
         Win32::RoundRect (txDC(), 1050, 550, 1250, 650, 30, 30);
+
 
 
         if(PAGE == "Режим меню")
@@ -136,7 +82,38 @@ int main()
                             txMouseY() > y &&  txMouseY() < y + 200)
                         {
                             PAGE = "Режим игры";
-                            //Неплохо бы открывать именно выбранный уровень
+
+                            n_gamePicss = 0;
+                            //Прочитал первую строку
+                            ifstream file(str);
+                            while (file.good())
+                            {
+                                //Строка1 (x)
+                                getline(file, strokaX);
+                                if (strokaX.size() > 0)
+                                {
+                                    gamePics[n_gamePicss].x = atoi(strokaX.c_str());
+
+
+                                    //Строка2 (y)
+                                    getline(file, strokaY);
+                                    gamePics[n_gamePicss].y = atoi(strokaY.c_str());
+
+
+                                    //Строка3 (адрес)
+                                    getline(file, address);
+                                    gamePics[n_gamePicss].address = address;
+                                    gamePics[n_gamePicss].object = txLoadImage(address.c_str());
+
+                                    gamePics[n_gamePicss].width = 60;
+                                    gamePics[n_gamePicss].height = 60;
+                                    gamePics[n_gamePicss].visible = true;
+                                    n_gamePicss = n_gamePicss + 1;
+                                }
+                            }
+
+                            file.close();
+
                             txSleep(200);
                         }
 
@@ -159,25 +136,6 @@ int main()
             txSetFillColor(TX_WHITE);
             txClear();
 
-            //Прохождение уровня
-            if (pers.x >= 1500)
-            {
-                txMessageBox("Ты победил");
-                break;
-            }
-
-            if (pers.y <= -40)
-            {
-                txMessageBox("Ты проиграл");
-                break;
-            }
-
-            if (pers.x <= -40)
-            {
-                txMessageBox("Не в ту сторону, вернись обратно");
-                //Зачем break? Может просто x вернуть?
-                break;
-            }
 
 
 
@@ -188,7 +146,7 @@ int main()
                 {
                     txSetColor(RGB(115,115,115));
                     txSetFillColor(RGB(115,115,115));
-                    txRectangle(gamePics[i].x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
                 }
 
                 if(gamePics[i].visible && gamePics[i].address == "Картинки/money.bmp")
@@ -236,12 +194,12 @@ int main()
             //Игровая логика
             pers.movePerson();
 
-            if (pers.x < 100)
+            if (pers.x - central_x < 100)
             {
                 central_x = central_x - 5;
             }
 
-            if (pers.x > 900)
+            if (pers.x - central_x > 900)
             {
                 central_x = central_x + 5;
             }
@@ -294,6 +252,27 @@ int main()
                 if(gamePics[i].visible)
                     txBitBlt(txDC(), gamePics[i].x - central_x, gamePics[i].y, 250, 160, gamePics[i].object);
 
+            //Прохождение уровня
+            txSetFillColor(TX_BLACK);
+            txRectangle (1495 - central_x, 0, 1500 - central_x, 725);
+            if (pers.x >= 1500)
+            {
+                txMessageBox("Ты победил");
+                break;
+            }
+
+            if (pers.y <= -40)
+            {
+                txMessageBox("Ты проиграл");
+                break;
+            }
+
+            if (pers.x <= -40)
+            {
+                txMessageBox("Не в ту сторону, вернись обратно");
+                //Зачем break? Может просто x вернуть?
+                break;
+            }
 
 
 
@@ -328,7 +307,7 @@ int main()
                 txMouseX() > 1050 &&  txMouseX() < 1250 &&
                 txMouseY() > 550 &&  txMouseY() < 650)
             {
-                PAGE = "Режим игры";
+                PAGE = "Режим меню";
                 txSleep(200);
             }
 
@@ -358,7 +337,7 @@ int main()
             for (int i = 0; i < n_pics; i++)
             {
                 if (txMouseButtons() == 1 &&
-                    txMouseX() > pic[i].x &&  txMouseX() < pic[i].x + 60 &&
+                    txMouseX() > pic[i].x - central_x &&  txMouseX() < pic[i].x - central_x + 60 &&
                     txMouseY() > pic[i].y &&  txMouseY() < pic[i].y + 60)
                 {
                     active_pic = i;
@@ -377,7 +356,7 @@ int main()
             //Движение картинки мышкой
             if(active_pic >= 0 && txMouseButtons() == 1 && txMouseX() < 1000)
             {
-                pic[active_pic].x = txMouseX() - 20;
+                pic[active_pic].x = txMouseX() + central_x - 20;
                 pic[active_pic].y = txMouseY() - 20;
             }
 
