@@ -216,7 +216,7 @@ int main()
 
 
 
-            if (GetAsyncKeyState('J')) {
+            if (GetAsyncKeyState(VK_UP)) {
                 pers.vy = -10;
             }
 
@@ -245,6 +245,8 @@ int main()
             sprintf(stroka, "Очков: %d", points);
             txDrawText (30, txGetExtentY() - 40, 200, txGetExtentY(), stroka);
 
+
+
             Win32::TransparentBlt (txDC(), pers.x - 50 - central_x, pers.y - 50, 100, 100, pers.person, 536 * pers.frame, 0, 536, 422, TX_WHITE);
 
             //Рисование кирпичей, монет и т.д.
@@ -264,14 +266,14 @@ int main()
             if (pers.y <= -40)
             {
                 txMessageBox("Ты проиграл");
-                break;
+                 return 0;
             }
 
             if (pers.x <= -40)
             {
                 txMessageBox("Не в ту сторону, вернись обратно");
                 //Зачем break? Может просто x вернуть?
-                break;
+                return 0;
             }
 
 
@@ -382,7 +384,7 @@ int main()
 
         //Открыть файл
         txRectangle(2,2, 200, 60);
-        txDrawText(2,2,200,60, "Открыть", 5);
+        txDrawText(2,2,200,60, "Сохранить", 5);
         if (txMouseButtons() == 1 &&
                 txMouseX() > 2 &&  txMouseY() > 2 &&
                 txMouseX() < 200 &&  txMouseY() < 60)
@@ -423,6 +425,65 @@ int main()
                 }
 
                 file2.close();
+
+            }    //return 0;
+        }
+
+                txRectangle(210,2, 388, 60);
+        txDrawText(210,2, 388, 60, "Открыть", 5);
+        if (txMouseButtons() == 1 &&
+                txMouseX() > 210 &&  txMouseY() > 2 &&
+                txMouseX() < 388 &&  txMouseY() < 60)
+        {
+            OPENFILENAME ofn;			// структура стандартного диалогового окна
+            char szFile[260] = {0};			// буфер для имени файла
+
+            // Инициализация OPENFILENAME
+            ZeroMemory(&ofn, sizeof(ofn));
+            ofn.lStructSize = sizeof(ofn);
+            ofn.hwndOwner = txWindow();
+            ofn.lpstrFile = szFile;
+            ofn.nMaxFile = sizeof(szFile);
+            ofn.lpstrFilter = "Text\0*.TXT\0";
+            ofn.nFilterIndex = 1;
+            ofn.lpstrFileTitle = NULL;
+            ofn.nMaxFileTitle = 0;
+            ofn.lpstrInitialDir = NULL;
+            ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+
+            if (GetOpenFileName(&ofn))
+            {
+                            n_pics = 0;
+                            //Прочитал первую строку
+                            ifstream file(ofn.lpstrFile);
+                            while (file.good())
+                            {
+                                //Строка1 (x)
+                                getline(file, strokaX);
+                                if (strokaX.size() > 0)
+                                {
+                                    pic[n_pics].x = atoi(strokaX.c_str());
+
+
+                                    //Строка2 (y)
+                                    getline(file, strokaY);
+                                    pic[n_pics].y = atoi(strokaY.c_str());
+
+
+                                    //Строка3 (адрес)
+                                    getline(file, address);
+                                    pic[n_pics].address = address;
+                                    pic[n_pics].object = txLoadImage(address.c_str());
+
+                                    pic[n_pics].width = 60;
+                                    pic[n_pics].height = 60;
+                                    pic[n_pics].visible = true;
+                                    n_pics = n_pics + 1;
+                                }
+                            }
+
+                            file.close();
 
             }    //return 0;
         }
