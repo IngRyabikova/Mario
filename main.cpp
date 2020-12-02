@@ -52,7 +52,6 @@ int main()
         txClear();
 
         txSetColor(TX_BLACK, 5);
-        Win32::RoundRect (txDC(), 1050, 550, 1250, 650, 30, 30);
 
 
 
@@ -63,6 +62,8 @@ int main()
             setlocale(LC_ALL, "Russian");
             DIR *dir = opendir (".");
             struct dirent *ent;
+
+            txDrawText(400, 150, 800, 300, "Выбери уровень");
 
             if ((dir = opendir (".")) != NULL) {
                 while ((ent = readdir (dir)) != NULL) {
@@ -103,7 +104,18 @@ int main()
                                     //Строка3 (адрес)
                                     getline(file, address);
                                     gamePics[n_gamePicss].address = address;
-                                    gamePics[n_gamePicss].object = txLoadImage(address.c_str());
+
+                                    bool addressFind = false;
+                                    for (int i = 0; i < n_gamePicss; i++)
+                                    if (address == gamePics[i].address)
+                                    {
+                                        addressFind = true;
+                                        gamePics[n_gamePicss].object = gamePics[i].object;
+                                    }
+
+                                    if (!addressFind)
+                                        gamePics[n_gamePicss].object = txLoadImage(address.c_str());
+
 
                                     gamePics[n_gamePicss].width = 60;
                                     gamePics[n_gamePicss].height = 60;
@@ -118,7 +130,7 @@ int main()
                         }
 
 
-                        x = x + 100;
+                        x = x + 150;
                         if (x > 700)
                         {
                             y = y + 150;
@@ -260,45 +272,55 @@ int main()
             if (pers.x >= 1500)
             {
                 txMessageBox("Ты победил");
-                break;
+                txSleep(2000);
+                PAGE = "Режим меню";
+                pers.x = 200;
             }
 
             if (pers.y <= -40)
             {
                 txMessageBox("Ты проиграл");
-                 return 0;
+                txSleep(2000);
+                PAGE = "Режим меню";
+                pers.y = 0;
             }
 
             if (pers.x <= -40)
             {
                 txMessageBox("Не в ту сторону, вернись обратно");
-                //Зачем break? Может просто x вернуть?
-                return 0;
+                txSleep(2000);
+
+                //PAGE = "Режим меню";
+                //pers.x = 200;
             }
-
-
-
-
         }
         if (PAGE == "Режим редактора")
         {
+            txSetColor(RGB(115,115,115));
+            txSetFillColor(RGB(115,115,115));
+            txRectangle(0, 500, 1500, 800);
+
+
             txSetFillColor(TX_YELLOW);
             Win32::RoundRect (txDC(), 200, 600, 300, 700, 30, 30);
+            txDrawText(200, 600, 300, 700, "<<<");
             Win32::RoundRect (txDC(), 900, 600, 1000, 700, 30, 30);
+            txDrawText(900, 600, 1000, 700, ">>>");
             if (txMouseButtons() == 1 &&
                 txMouseX() > 200 &&  txMouseX() < 300 &&
                 txMouseY() > 600 &&  txMouseY() < 700)
             {
-                central_x = central_x + 5;
+                central_x = central_x - 5;
             }
 
             if (txMouseButtons() == 1 &&
                 txMouseX() > 900 &&  txMouseX() < 1000 &&
                 txMouseY() > 600 &&  txMouseY() < 700)
             {
-                central_x = central_x - 5;
+                central_x = central_x + 5;
             }
 
+            txSetColor(TX_BLACK);
             txDrawText(1050, 550, 1250, 650, "Режим игры");
 
             txSetColor(TX_BLACK);
@@ -346,15 +368,6 @@ int main()
                 }
             }
 
-            /*if (GetAsyncKeyState(VK_LEFT)  and active_pic >= 0)
-                pic[active_pic].x = pic[active_pic].x - 2;
-            if (GetAsyncKeyState(VK_RIGHT) and active_pic >= 0)
-                pic[active_pic].x = pic[active_pic].x + 2;
-            if (GetAsyncKeyState(VK_UP)    and active_pic >= 0)
-                pic[active_pic].y = pic[active_pic].y - 2;
-            if (GetAsyncKeyState(VK_DOWN)  and active_pic >= 0)
-                pic[active_pic].y = pic[active_pic].y + 2;
-               */
             //Движение картинки мышкой
             if(active_pic >= 0 && txMouseButtons() == 1 && txMouseX() < 1000)
             {
@@ -378,7 +391,6 @@ int main()
                     pic[i].x = round(pic[i].x/60)*60;
                     pic[i].y = round(pic[i].y/60)*60;
                 }
-
             }
 
 
