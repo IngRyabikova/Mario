@@ -51,36 +51,24 @@ void gravityPerson(Person *pers)
         int y = pers->y - 40;
         while (y < pers->y + 40)
         {
-            if (txGetPixel(x, y) == RGB(115,115,115) &&
-                txGetPixel(pers->x, pers->y) != RGB(115,115,115) &&
-                txGetPixel(pers->x , pers->y - 40) != RGB(115,115,115))
+            if (txGetPixel(x, y) == RGB(115,115,115))
             {
-                pers->y=pers->y + 5;
-
+                if (txGetPixel(pers->x, pers->y) != RGB(115,115,115) &&
+                    txGetPixel(pers->x, pers->y + 40) != RGB(115,115,115))
+                    {
+                pers->y=pers->y - 9;
                 break;
-            }
-            if (txGetPixel(x, y) == RGB(115,115,115) &&
-                txGetPixel(pers->x, pers->y) != RGB(115,115,115) &&
-                txGetPixel(pers->x + 40 , pers->y != RGB(115,115,115)))
-            {
-                pers->x=pers->x - 9;
-
-                break;
+                }
             }
 
-
-            if (txGetPixel(x, y) == RGB(128,255,128) &&
-                txGetPixel(pers->x, pers->y) != RGB(128,255,128) &&    //Центр
-                txGetPixel(pers->x, pers->y + 40) != RGB(128,255,128)) //Низ
+            if (txGetPixel(x, y) == RGB(128,255,128))
             {
                 pers->y=pers->y - 9;
                 //pers->y=pers->y + 20;
                 break;
             }
 
-            if (txGetPixel(x, y) == RGB(255,128,64) &&
-                txGetPixel(pers->x, pers->y) != RGB(255,128,64) &&
-                txGetPixel(pers->x, pers->y + 40) != RGB(255,128,64))
+            if (txGetPixel(x, y) == RGB(255,128,64))
             {
                 pers->y=pers->y - 9;
                 break;

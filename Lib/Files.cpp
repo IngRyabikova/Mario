@@ -42,14 +42,15 @@ void saveToFile(int n_pics, Picture* pic)
     }
 }
 
-int ReadFiles(Picture* gamePics, int n_gamePicss)
+int ReadFiles(Picture* gamePics, int n_gamePicss, string fileName)
 {
+    n_gamePicss = 0;
     string strokaX;
     string strokaY;
     string address;
 
     //Прочитал первую строку
-    ifstream file("2.txt");
+    ifstream file(fileName);
     while (file.good())
     {
         //Строка1 (x)

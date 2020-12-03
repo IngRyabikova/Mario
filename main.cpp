@@ -36,13 +36,9 @@ int main()
 
     Person pers = {100, 150, -10, 100, 0, txLoadImage("Картинки/HeroLeft.bmp"), txLoadImage("Картинки/HeroRight.bmp"), txLoadImage("Картинки/HeroLeft.bmp")};
 
-
+    ///Картинки для уровня в режиме игры
     Picture gamePics[100];
     int n_gamePicss = 0;
-    string strokaX;
-    string strokaY;
-    string address;
-
 
 
     while(!GetAsyncKeyState(VK_ESCAPE))
@@ -63,7 +59,8 @@ int main()
             DIR *dir = opendir (".");
             struct dirent *ent;
 
-            txDrawText(400, 150, 800, 300, "Выбери уровень");
+            txSelectFont("Arial", 30);
+            txDrawText(400, 100, 800, 200, "Выбери уровень");
 
             if ((dir = opendir (".")) != NULL) {
                 while ((ent = readdir (dir)) != NULL) {
@@ -84,48 +81,8 @@ int main()
                         {
                             PAGE = "Режим игры";
 
-                            n_gamePicss = 0;
-                            //Прочитал первую строку
-                            ifstream file(str);
-                            while (file.good())
-                            {
-                                //Строка1 (x)
-                                getline(file, strokaX);
-                                if (strokaX.size() > 0)
-                                {
-                                    gamePics[n_gamePicss].x = atoi(strokaX.c_str());
-
-
-                                    //Строка2 (y)
-                                    getline(file, strokaY);
-                                    gamePics[n_gamePicss].y = atoi(strokaY.c_str());
-
-
-                                    //Строка3 (адрес)
-                                    getline(file, address);
-                                    gamePics[n_gamePicss].address = address;
-
-                                    bool addressFind = false;
-                                    for (int i = 0; i < n_gamePicss; i++)
-                                    if (address == gamePics[i].address)
-                                    {
-                                        addressFind = true;
-                                        gamePics[n_gamePicss].object = gamePics[i].object;
-                                    }
-
-                                    if (!addressFind)
-                                        gamePics[n_gamePicss].object = txLoadImage(address.c_str());
-
-
-                                    gamePics[n_gamePicss].width = 60;
-                                    gamePics[n_gamePicss].height = 60;
-                                    gamePics[n_gamePicss].visible = true;
-                                    n_gamePicss = n_gamePicss + 1;
-                                }
-                            }
-
-                            file.close();
-
+                            n_gamePicss = ReadFiles(gamePics, n_gamePicss, str);
+                            central_x = 0;
                             txSleep(200);
                         }
 
@@ -441,7 +398,7 @@ int main()
             }    //return 0;
         }
 
-                txRectangle(210,2, 388, 60);
+        txRectangle(210,2, 388, 60);
         txDrawText(210,2, 388, 60, "Открыть", 5);
         if (txMouseButtons() == 1 &&
                 txMouseX() > 210 &&  txMouseY() > 2 &&
@@ -466,41 +423,10 @@ int main()
 
             if (GetOpenFileName(&ofn))
             {
-                            n_pics = 0;
-                            //Прочитал первую строку
-                            ifstream file(ofn.lpstrFile);
-                            while (file.good())
-                            {
-                                //Строка1 (x)
-                                getline(file, strokaX);
-                                if (strokaX.size() > 0)
-                                {
-                                    pic[n_pics].x = atoi(strokaX.c_str());
-
-
-                                    //Строка2 (y)
-                                    getline(file, strokaY);
-                                    pic[n_pics].y = atoi(strokaY.c_str());
-
-
-                                    //Строка3 (адрес)
-                                    getline(file, address);
-                                    pic[n_pics].address = address;
-                                    pic[n_pics].object = txLoadImage(address.c_str());
-
-                                    pic[n_pics].width = 60;
-                                    pic[n_pics].height = 60;
-                                    pic[n_pics].visible = true;
-                                    n_pics = n_pics + 1;
-                                }
-                            }
-
-                            file.close();
-
-            }    //return 0;
+                n_pics = ReadFiles(pic, n_pics, ofn.lpstrFile);
+                central_x = 0;
+            }
         }
-
-
     }
 
 
