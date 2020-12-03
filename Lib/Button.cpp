@@ -1,15 +1,21 @@
+///\file Button.cpp
+///\brief Про кнопки
+
 #include "TXLib.h"
+
+///Структура "кнопка"
 struct Button
 {
     int x;
     int y;
     const char* text;
 
-
+    ///Адрес картинки, связанной с кнопкой
     string address;
     HDC object;
 };
 
+///Функция "рисование кнопки"
 void drawButton(int x,int y,const char* text)
 {
     txSetColour(TX_BLACK);
