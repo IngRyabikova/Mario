@@ -54,7 +54,7 @@ int main()
         if(PAGE == "Режим меню")
         {
             int x = 100;
-            int y = 200;
+            int y = 250;
             setlocale(LC_ALL, "Russian");
             DIR *dir = opendir (".");
             struct dirent *ent;
@@ -104,9 +104,6 @@ int main()
         {
             txSetFillColor(TX_WHITE);
             txClear();
-
-
-
 
             //Рисование квадратов
             for (int i = 0; i < n_gamePicss; i++)
@@ -164,14 +161,10 @@ int main()
             pers.movePerson();
 
             if (pers.x - central_x < 100)
-            {
                 central_x = central_x - 5;
-            }
-
-            if (pers.x - central_x > 900)
-            {
+            else if (pers.x - central_x > 900)
                 central_x = central_x + 5;
-            }
+
 
             if (txMouseButtons() == 1 &&
                 txMouseX() > 1050 &&  txMouseX() < 1250 &&
@@ -248,7 +241,7 @@ int main()
                 txSleep(2000);
 
                 //PAGE = "Режим меню";
-                //pers.x = 200;
+                pers.x = 200;
             }
         }
         if (PAGE == "Режим редактора")

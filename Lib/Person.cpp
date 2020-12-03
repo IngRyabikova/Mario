@@ -1,9 +1,14 @@
+///\file Person.cpp
+///\brief Про персонажа
 #include "TXLib.h"
 
+///Структура "Персонаж"
 struct Person
 {
+
     int x;
     int y;
+    ///Скорость движения по y
     float vy;
     int personLife;
     int frame;
@@ -11,7 +16,7 @@ struct Person
     HDC personRight;
     HDC person;
 
-    //Какая из двух функций движения используется?
+    ///Функция движения
     void movePerson()
     {
         if (GetAsyncKeyState(VK_LEFT))
@@ -40,6 +45,7 @@ struct Person
     }
 };
 
+///Функция полёта
 void gravityPerson(Person *pers)
 {
     if (pers->vy > 10)

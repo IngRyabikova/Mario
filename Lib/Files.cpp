@@ -1,3 +1,5 @@
+///\file Files.cpp
+///\brief Про сохранение в файлы
 #include "TXLib.h"
 #include "Picture.cpp"
 #include <fstream>
@@ -6,12 +8,13 @@
 #include "windows.h"
 using namespace std;
 
+///Функция "Сохранение в файл"
 void saveToFile(int n_pics, Picture* pic)
 {
-    OPENFILENAME ofn;			// структура стандартного диалогового окна
-    char szFile[260] = {0};			// буфер для имени файла
+    OPENFILENAME ofn;			/// структура стандартного диалогового окна
+    char szFile[260] = {0};			/// буфер для имени файла
 
-    // Инициализация OPENFILENAME
+    /// Инициализация OPENFILENAME
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = txWindow();
@@ -25,7 +28,7 @@ void saveToFile(int n_pics, Picture* pic)
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 
-    // Покажем диалоговое окно Открыть (Open).
+    /// Покажем диалоговое окно Открыть (Open).
     if (GetSaveFileName(&ofn))
     {
         string fileName = ofn.lpstrFile;
@@ -49,8 +52,9 @@ int ReadFiles(Picture* gamePics, int n_gamePicss, string fileName)
     string strokaY;
     string address;
 
-    //Прочитал первую строку
+    ///Прочитал первую строку
     ifstream file(fileName);
+
     while (file.good())
     {
         //Строка1 (x)
