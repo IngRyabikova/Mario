@@ -12,6 +12,7 @@ struct Button
 
     ///Адрес картинки, связанной с кнопкой
     string address;
+    ///Картинка
     HDC object;
 };
 
@@ -19,7 +20,7 @@ struct Button
 void drawButton(int x,int y,const char* text)
 {
     txSetColour(TX_BLACK);
-    txRectangle(x,y,x + 200,y + 100);
+    txRectangle(x,y,x + 200,y + 80);
     txSelectFont("ARIAL", 40);
-    txDrawText(x,y,x + 200,y + 100,text);
+    txDrawText(x,y,x + 200,y + 80,text);
 }

@@ -23,13 +23,14 @@ int main()
     int points = 0;
 
     //Хранить сколько картинок (0)
-    const int COUNT_BTN = 5;
+    const int COUNT_BTN = 6;
     Button btn[COUNT_BTN];
     btn[0] = {1050,0,   "Кирпич",   "Картинки/kirpich.bmp", txLoadImage ("Картинки/kirpich.bmp")};
-    btn[1] = {1050,110, "Вопрос",   "Картинки/вопрос.bmp", txLoadImage ("Картинки/вопрос.bmp")};
-    btn[2] = {1050,220, "Труба",    "Картинки/truba.bmp", txLoadImage ("Картинки/truba.bmp")};
-    btn[3] = {1050,330, "Деньги",   "Картинки/money.bmp", txLoadImage ("Картинки/money.bmp")};
-    btn[4] = {1050,440, "Огонь",    "Картинки/fire.bmp", txLoadImage ("Картинки/fire.bmp")};
+    btn[1] = {1050,90, "Вопрос",   "Картинки/вопрос.bmp", txLoadImage ("Картинки/вопрос.bmp")};
+    btn[2] = {1050,180, "Труба",    "Картинки/truba.bmp", txLoadImage ("Картинки/truba.bmp")};
+    btn[3] = {1050,270, "Деньги",   "Картинки/money.bmp", txLoadImage ("Картинки/money.bmp")};
+    btn[4] = {1050,360, "Огонь",    "Картинки/fire.bmp", txLoadImage ("Картинки/fire.bmp")};
+    btn[5] = {1050,450, "Черепаха", "Картинки/черепаха.bmp", txLoadImage ("Картинки/черепаха.bmp")};
 
 
 
@@ -104,6 +105,8 @@ int main()
         {
             txSetFillColor(TX_WHITE);
             txClear();
+
+
 
             //Рисование квадратов
             for (int i = 0; i < n_gamePicss; i++)
@@ -216,6 +219,10 @@ int main()
                 if(gamePics[i].visible)
                     txBitBlt(txDC(), gamePics[i].x - central_x, gamePics[i].y, 250, 160, gamePics[i].object);
 
+            for (int i = 0; i < n_gamePicss; i++)
+            if (gamePics[i].address == "Картинки/черепаха.bmp")
+                gamePics[i].x = gamePics[i].x - 3;
+
             //Прохождение уровня
             txSetFillColor(TX_BLACK);
             txRectangle (1495 - central_x, 0, 1500 - central_x, 725);
@@ -291,7 +298,7 @@ int main()
             for (int i = 0; i < COUNT_BTN; i = i + 1)
             if (txMouseButtons() == 1 &&
                 txMouseX() > btn[i].x &&  txMouseX() < btn[i].x + 230 &&
-                txMouseY() > btn[i].y &&  txMouseY() < btn[i].y + 110)
+                txMouseY() > btn[i].y &&  txMouseY() < btn[i].y + 90)
             {
                 //Рисовать кирпич
                 active_pic = n_pics;
