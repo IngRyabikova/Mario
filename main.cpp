@@ -217,11 +217,28 @@ int main()
             //Рисование кирпичей, монет и т.д.
             for (int i = 0; i < n_gamePicss; i++)
                 if(gamePics[i].visible)
-                    txBitBlt(txDC(), gamePics[i].x - central_x, gamePics[i].y, 250, 160, gamePics[i].object);
+                    if (gamePics[i].address == "Картинки/черепаха.bmp")
+                        txTransparentBlt(txDC(), gamePics[i].x - central_x, gamePics[i].y, 150, 100, gamePics[i].object, 0, 0, TX_WHITE);
+                    else
+                        txBitBlt(txDC(), gamePics[i].x - central_x, gamePics[i].y, 250, 160, gamePics[i].object);
 
             for (int i = 0; i < n_gamePicss; i++)
             if (gamePics[i].address == "Картинки/черепаха.bmp")
                 gamePics[i].x = gamePics[i].x - 3;
+
+            for (int i = 0; i < n_gamePicss; i++)
+                if (gamePics[i].x      < pers.x + 60 and
+                    gamePics[i].x + 150 > pers.x and
+                    gamePics[i].y      < pers.y + 70 and
+                    gamePics[i].visible and
+                    gamePics[i].y + 100 > pers.y and
+                    gamePics[i].address == "Картинки/черепаха.bmp")
+                {
+                    gamePics[i].visible = false;
+                    points = points - 100;
+                    txMessageBox("Вы откупились от черепахи");
+                }
+
 
             //Прохождение уровня
             txSetFillColor(TX_BLACK);
@@ -246,8 +263,6 @@ int main()
             {
                 txMessageBox("Не в ту сторону, вернись обратно");
                 txSleep(2000);
-
-                //PAGE = "Режим меню";
                 pers.x = 200;
             }
         }
