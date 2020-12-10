@@ -115,35 +115,35 @@ int main()
                 {
                     txSetColor(RGB(115,115,115));
                     txSetFillColor(RGB(115,115,115));
-                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x - central_x + 60, gamePics[i].y + 60);
                 }
 
                 if(gamePics[i].visible && gamePics[i].address == "Картинки/money.bmp")
                 {
                     txSetColor(RGB(245,136,46));
                     txSetFillColor(RGB(245,136,46));
-                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x - central_x + 60, gamePics[i].y + 60);
                 }
 
                 if(gamePics[i].visible && gamePics[i].address == "Картинки/fire.bmp")
                 {
                     txSetColor(RGB(255,36,36));
                     txSetFillColor(RGB(255,36,36));
-                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x - central_x + 60, gamePics[i].y + 60);
                 }
 
                 if(gamePics[i].visible && gamePics[i].address == "Картинки/truba.bmp")
                 {
                     txSetColor(RGB(128,255,128));
                     txSetFillColor(RGB(128,255,128));
-                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60  );
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x - central_x + 60, gamePics[i].y + 60  );
                 }
 
-                if(gamePics[i].visible && gamePics[i].address == "Картинки/vopros.bmp")
+                if(gamePics[i].visible && (gamePics[i].address == "Картинки/vopros.bmp" || gamePics[i].address == "Картинки/вопрос.bmp"))
                 {
                     txSetColor(RGB(255,128,64));
                     txSetFillColor(RGB(255,128,64));
-                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x + 60, gamePics[i].y + 60);
+                    txRectangle(gamePics[i].x - central_x, gamePics[i].y, gamePics[i].x - central_x + 60, gamePics[i].y + 60);
                 }
 
 
@@ -177,7 +177,7 @@ int main()
                 txSleep(200);
             }
 
-            gravityPerson(&pers);
+            gravityPerson(&pers, central_x);
 
 
 
@@ -185,10 +185,6 @@ int main()
                 pers.vy = -10;
             }
 
-            pers.vy = pers.vy + 0.5;
-            pers.y = pers.y + pers.vy;
-            if (pers.y > 500)
-                pers.y = 500;
 
 
             txSetFillColor(TX_WHITE);

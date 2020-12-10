@@ -22,7 +22,6 @@ struct Person
     void movePerson()
     {
         oldX = x;
-        oldY = y;
         if (GetAsyncKeyState(VK_LEFT))
         {
             x = x - 3;
@@ -50,57 +49,50 @@ struct Person
 };
 
 ///Функция полёта
-void gravityPerson(Person *pers, int central_x)
+void gravityPerson(Person *pers)
 {
-    pers->vy = pers->vy + 0.5;
-    pers->y = pers->y + pers->vy;
-    if (pers->y > 500)
-        pers->y = 500;
-
-
     if (pers->vy > 10)
         pers->vy = 10;
 
     bool stolknulsa = false;
-    bool sverhu = false;
-
-    int x = pers->x - central_x - 30;
-    while (x < pers->x - central_x + 30)
+    int x = pers->x - 40;
+    while (x < pers->x + 40)
     {
-        int y = pers->y - 30;
-        while (y < pers->y + 30)
+        int y = pers->y - 40;
+        while (y < pers->y + 40)
         {
-            //Кирпич
-            if (txGetPixel(x, y) == RGB(115,115,115))
+
+            if (txGetPixel(x, y) == RGB(115,115,115) &&
+                txGetPixel(pers->x, pers->y) != RGB(115,115,115) &&
+                txGetPixel(pers->x + 40 , pers->y != RGB(115,115,115)))
             {
                 //pers->x=pers->x - 9;
                 stolknulsa = true;
-                if (y >= pers->y + 20)
-                    sverhu = true;
-            }
 
-
-            if (txGetPixel(x, y) == RGB(128,255,128)) //Низ
-            {
-                stolknulsa = true;
-                if (y >= pers->y + 20)
-                    sverhu = true;
                 //break;
             }
 
-            if (txGetPixel(x, y) == RGB(255,128,64))
+
+            if (txGetPixel(x, y) == RGB(128,255,128) &&
+                txGetPixel(pers->x, pers->y) != RGB(128,255,128) &&    //Центр
+                txGetPixel(pers->x, pers->y + 40) != RGB(128,255,128)) //Низ
             {
-                stolknulsa = true;
-                if (y >= pers->y + 20)
-                    sverhu = true;
+                //pers->y=pers->y - 9;
+                //pers->y=pers->y + 20;
+                //break;
+            }
+
+            if (txGetPixel(x, y) == RGB(255,128,64) &&
+                txGetPixel(pers->x, pers->y) != RGB(255,128,64) &&
+                txGetPixel(pers->x, pers->y + 40) != RGB(255,128,64))
+            {
+                //pers->y=pers->y - 9;
                 //break;
             }
 
              if (txGetPixel(x, y) == RGB(100,100,100))
              {
-                stolknulsa = true;
-                if (y >= pers->y + 20)
-                    sverhu = true;
+                //pers ->x=pers->x + 9;
                 //break;
 
              }
@@ -112,8 +104,6 @@ void gravityPerson(Person *pers, int central_x)
 
     if (stolknulsa)
     {
-        if (!sverhu)
-            pers->x = pers->oldX;
-        pers->y = pers->oldY;
+        pers->x = pers->oldX;
     }
 }
